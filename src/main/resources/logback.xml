@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- 控制台输出 -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%-5level] %d{HH:mm:ss.SSS} %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- SQL log文件输出 -->
+	<appender name="sqllog"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>log/sql.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<!--格式化输出 -->
+			<pattern>[%-5p] %d{HH:mm:ss} [%c] - %m%n</pattern>
+		</layout>
+	</appender>
+
+	<!-- APP log文件输出 -->
+	<appender name="applog"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>log/app.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<!--格式化输出 -->
+			<pattern>[%-5p] %d{HH:mm:ss} [%c][%M] - %m%n</pattern>
+		</layout>
+	</appender>
+
+	<!-- ERROR log文件输出 -->
+	<appender name="errorlog"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>log/error.%d{yyyy-MM-dd}.log</FileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<!--格式化输出 -->
+			<pattern>[%-5p] %d{HH:mm:ss} [%c][%M] - %m%n</pattern>
+		</layout>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+	<!-- SQL log -->
+	<logger name="com.yimeicloud.study.ssm.dao" level="DEBUG">
+		<appender-ref ref="sqllog" />
+	</logger>
+
+	<!-- root -->
+	<root level="DEBUG">
+		<appender-ref ref="console" />
+		<appender-ref ref="applog" />
+		<appender-ref ref="errorlog" />
+	</root>
+</configuration>

@@ -1,0 +1,18 @@
+package com.yimeicloud.study.ssm.controller;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+public class AuthorizeController {
+	private static final Logger logger = LoggerFactory.getLogger(AuthorizeController.class);
+	
+	@RequestMapping(value="/unauthorized", method=RequestMethod.GET)
+	public String unauthorized() {
+		logger.info("AuthorizeController /unauthorized");
+		return "unauthorized";
+	}
+}
