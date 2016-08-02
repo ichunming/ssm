@@ -27,6 +27,12 @@
     <!-- 扩充注解驱动，可以将请 求参 器参数 -->
     <mvc:annotation-driven />
     
+    <!-- 静态资源配置 -->
+    <mvc:resources location="/htm/" mapping="/htm/**"/>
+    <mvc:resources location="/img/" mapping="/img/**"/>
+    <mvc:resources location="/css/" mapping="/css/**"/>
+    <mvc:resources location="/js/" mapping="/js/**"/>
+    
     <!-- Thymeleaf View Resolver - implementation of Spring's ViewResolver interface -->
     <bean id="viewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
         <property name="templateEngine" ref="templateEngine" />

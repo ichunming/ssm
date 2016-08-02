@@ -22,37 +22,54 @@ public class LoginController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login() {
+		
+		// 获取当前用户
+		logger.debug("获取当前用户...");
+		Subject currentUser = SecurityUtils.getSubject();
+		
+		// 用户登入状态判断
+		if(currentUser.isAuthenticated()) {
+			// 用户已登入
+			logger.debug("用户已登入");
+			return "redirect:/home";
+		}
+	    
 		// 登入页面跳转
 		logger.debug("登入页面跳转");
 		return "login";
 	}
-	
+
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout() {
 		// 登出处理
 		logger.debug("登出处理...");
 		Subject currentUser = SecurityUtils.getSubject();
 		currentUser.logout();
-		
+
 		// 登入页面跳转
 		logger.debug("登入页面跳转");
-		return "login";
+		return "redirect:/login";
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(@RequestParam("username")String username, @RequestParam("password")String password, Model model) {
+	public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
 		String eMsg = "";
-		
+
 		// 用户名，密码非空check TODO
-		
+		if ("".equals(username) || "".equals(password)) {
+			eMsg = "用户名/密码不能为空";
+			model.addAttribute("eMsg", eMsg);
+			return "login";
+		}
+
 		// 获取当前用户
 		logger.debug("获取当前用户...");
 		Subject currentUser = SecurityUtils.getSubject();
-		
+
 		// 创建用户登录凭证
 		logger.debug("创建用户登入凭证...");
 		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-		
+
 		// 登入
 		try {
 			logger.debug("登入...");
@@ -61,15 +78,15 @@ public class LoginController {
 			// 用户名错误
 			logger.debug("用户名错误");
 			eMsg = "用户名/密码错误";
-		} catch(IncorrectCredentialsException e) {
+		} catch (IncorrectCredentialsException e) {
 			// 密码错误
 			logger.debug("密码错误");
 			eMsg = "用户名/密码错误";
-		} catch(LockedAccountException e) {
+		} catch (LockedAccountException e) {
 			// 帐号被锁
 			logger.debug("帐号被锁");
 			eMsg = "帐号被锁";
-		} catch(ExcessiveAttemptsException e) {
+		} catch (ExcessiveAttemptsException e) {
 			// 重复登入次数超过规定次数
 			logger.debug("重复登入次数超过规定次数");
 			eMsg = "频繁登入，请10分钟后再尝试";
@@ -84,15 +101,15 @@ public class LoginController {
 			logger.debug("认证通过...");
 		} else {
 			logger.debug("认证未通过...");
-			
+
 			// 添加提示信息，跳转登入页
 			logger.debug("跳转登入页");
 			model.addAttribute("eMsg", eMsg);
 			return "login";
 		}
-		
+
 		// 跳转首页
 		logger.debug("跳转首页");
-		return "home";
+		return "redirect:/home";
 	}
 }

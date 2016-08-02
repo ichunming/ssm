@@ -76,7 +76,8 @@ public class MyCredentialsMatcher implements CredentialsMatcher {
 		// 密码匹配
 		if (PasswordHelper.match(ByteSource.Util.bytes(orgPassword), salt, password)) {
 			// 密码匹配成功
-			logger.debug("密码匹配成功");
+			logger.debug("密码匹配成功，清除用户cache");
+			passwordRetryCache.remove(username);
 			return true;
 		}
 		

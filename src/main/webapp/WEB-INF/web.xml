@@ -5,11 +5,6 @@
 
 	<display-name>Archetype Created Web Application</display-name>
 
-	<!-- welcome -->
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
-
 	<!-- listener -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -21,6 +16,18 @@
 	</context-param>
 
 	<!-- filter -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>com.yimeicloud.study.ssm.filter.CharsetEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 	<filter>
 		<filter-name>shiroFilter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -45,4 +52,21 @@
 
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+
+    <!-- session -->
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+	
+	<!-- error page -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/htm/notFound.html</location>
+	</error-page>
+	
+	<!-- exception -->
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/htm/error.html</location>
+	</error-page>
 </web-app>
