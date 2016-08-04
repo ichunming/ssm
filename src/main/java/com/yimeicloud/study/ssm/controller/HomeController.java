@@ -19,6 +19,7 @@ public class HomeController {
 		// 登入页面跳转
 		logger.debug("Home页面跳转");
 		Subject currentUser = SecurityUtils.getSubject();
+
 		model.addAttribute("uInfo", currentUser);
 		return "home";
 	}

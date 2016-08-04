@@ -5,9 +5,7 @@
 <script language="JavaScript">
     javascript: window.history.forward(1);
 </script>
-<head>
-<title>登入</title>
-</head>
+<head th:include="header::header" />
 <body>
 	<h1>登入</h1>
 	<div th:if="${eMsg != null}" th:text="${eMsg}"></div>
@@ -21,8 +19,14 @@
 			</label>
 		</div>
 		<div>
+            <label> 自动登录: <input type="checkbox" name="rememberMe" value="true" checked="checked" />
+            </label>
+        </div>
+
+		<div>
 			<input type="submit" value="登入" />
 		</div>
 	</form>
 </body>
+<footer th:include="footer::footer"></footer>
 </html>

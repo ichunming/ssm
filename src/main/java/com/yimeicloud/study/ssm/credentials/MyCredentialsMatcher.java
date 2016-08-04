@@ -37,7 +37,7 @@ public class MyCredentialsMatcher implements CredentialsMatcher {
 	public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
 
 		String username = (String)token.getPrincipal();
-		ByteSource salt = null;
+		Object salt = null;
 		Object orgPassword = null;
 		String password = null;
 		
@@ -74,7 +74,7 @@ public class MyCredentialsMatcher implements CredentialsMatcher {
 		password = (String)info.getCredentials();
 		
 		// 密码匹配
-		if (PasswordHelper.match(ByteSource.Util.bytes(orgPassword), salt, password)) {
+		if (PasswordHelper.match(orgPassword, salt, password)) {
 			// 密码匹配成功
 			logger.debug("密码匹配成功，清除用户cache");
 			passwordRetryCache.remove(username);

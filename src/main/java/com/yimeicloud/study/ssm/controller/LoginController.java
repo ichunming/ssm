@@ -1,5 +1,7 @@
 package com.yimeicloud.study.ssm.controller;
 
+import javax.servlet.ServletRequest;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -8,6 +10,7 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -20,20 +23,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LoginController {
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
+	private String rememberMeParam = "rememberMe";
+	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login() {
-		
+
 		// 获取当前用户
 		logger.debug("获取当前用户...");
 		Subject currentUser = SecurityUtils.getSubject();
-		
+
 		// 用户登入状态判断
-		if(currentUser.isAuthenticated()) {
+		if (currentUser.isRemembered() || currentUser.isAuthenticated()) {
 			// 用户已登入
 			logger.debug("用户已登入");
 			return "redirect:/home";
 		}
-	    
+
 		// 登入页面跳转
 		logger.debug("登入页面跳转");
 		return "login";
@@ -52,7 +57,8 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
+	public String login(@RequestParam("username") String username, @RequestParam("password") String password,
+			ServletRequest request, Model model) {
 		String eMsg = "";
 
 		// 用户名，密码非空check TODO
@@ -68,8 +74,9 @@ public class LoginController {
 
 		// 创建用户登录凭证
 		logger.debug("创建用户登入凭证...");
-		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-
+		boolean rememberMe = WebUtils.isTrue(request, rememberMeParam);
+		UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
+		
 		// 登入
 		try {
 			logger.debug("登入...");

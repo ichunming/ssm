@@ -34,8 +34,15 @@ public class RegisterController {
 	public String register(@RequestParam("username")String username, @RequestParam("password")String password, Model model) {
 		String eMsg = "";
 		
-		// 用户名check
-		logger.debug("用户名check...");
+		// 用户名，密码非空check TODO
+		if ("".equals(username) || "".equals(password)) {
+			eMsg = "用户名/密码不能为空";
+			model.addAttribute("eMsg", eMsg);
+			return "register";
+		}
+		
+		// 用户名已存在check
+		logger.debug("用户名已存在check...");
 		if(userService.nameExist(username)) {
 			// 用户名已存在
 			logger.debug("用户名已存在");
